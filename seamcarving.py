@@ -1,20 +1,13 @@
+from PIL import ImageOps,Image
 import matplotlib.pyplot as plt
-from PIL import ImageOps,Image                                #height is 449 width is 689
-                                                               # number of rows is height
-
-
 import numpy as np
 import operator
+import sys
 
 def horizon(Eneg):
     Eneg=np.transpose(Eneg)
-
-
-
     height,width=Eneg.shape
-
     seam_dynamic =np.zeros(Eneg.shape)
-
     backtracker = np.zeros((Eneg.shape))
 
 
@@ -151,9 +144,6 @@ def imgcrop(q,ys,image):
 
     for e in range(len(ys)-1):
 
-
-
-
         #u= ys[e] + ys[e+1]
         ymax = max(ys[e+1])
         ymin = min(ys[e])
@@ -179,29 +169,15 @@ def imgcrop(q,ys,image):
         img.save("new{}.jpeg".format(e))
 
 
-
-
-
-
-
-
-
-
 if __name__ == '__main__':
 
-    image=Image.open("text1.jpeg")
+    image=Image.open("text.jpg")
     im=np.array(image)
-
-
-
     gray=image.convert("L")
     image=np.asarray(np.invert(gray))
     E=np.square(np.asarray(image,dtype="float32")/255.0)
-
-
     height, width = E.shape
     print(E.shape)
-
     x = []
     d1={}
     q=[]
@@ -212,7 +188,6 @@ if __name__ == '__main__':
     seamy=[]
     order=[]
     seamline=[]
-
 
     y = []
     E1 = E.copy()
@@ -253,7 +228,6 @@ if __name__ == '__main__':
 
 
 
-
         if itr==0:
             seamx.append(x)
             seamy.append(y)
@@ -272,24 +246,6 @@ if __name__ == '__main__':
                 seamy.append(y)
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     for i in range(len(seamy)):
         d1[i] = np.mean(seamy[i])
     d1 = sorted(d1.items(), key=(operator.itemgetter(1)))
@@ -299,24 +255,14 @@ if __name__ == '__main__':
         d.append(seamy[i])
 
     for i in d1:
-
-
         q.append((seamx[i[0]]))
         ys.append(d[i[0]])
-
-
-
         plt.figure()
         plt.imshow(E)
-        plt.scatter(seamx[i[0]], d[i[0]], c="R", s=0.1)
-
-
-
-
+        plt.scatter(seamx[i[0]], d[i[0]], c='r', s=0.1)
 
 
 
     imgcrop(q,ys,im)
-
     plt.show()
 
